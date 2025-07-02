@@ -77,6 +77,12 @@ func main() {
 		fmt.Println("Database initialized successfully")
 	case "version":
 		fmt.Println("GarminDB Go v1.0.0")
+	case "parse-fit":
+		if err := parseFitCommand(); err != nil {
+			log.Fatalf("Failed to parse FIT files: %v", err)
+		}
+		fmt.Println("FIT file parsing completed")
+
 	default:
 		fmt.Printf("Unknown command: %s\n", command)
 	}
@@ -209,4 +215,10 @@ func createTables() error {
 	}
 
 	return nil
+}
+
+// parseFitCommand handles the parse-fit command
+func parseFitCommand() error {
+	processor := NewFitProcessor(config.DataPath)
+	return processor.ProcessFitFiles()
 }
