@@ -1,6 +1,8 @@
 {
-  "username": "username",
-  "password": "password",
-  "activity_id": 123456789,
-  "output": "activity.fit"
+  "database_path": "./garmin.db",
+  "data_path": "./data",
+  "garmin_username": "username",
+  "garmin_password": "password",
+  "retain_files": true,
+  "download_days": 30
 }
