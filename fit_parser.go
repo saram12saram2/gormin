@@ -41,17 +41,20 @@ type FitParser struct {
 
 // NewFitParser creates a new FIT parser
 func NewFitParser(filename string) (*FitParser, error) {
+	fmt.Printf("[NewFitParser] Opening file: %s\n", filename)
+
 	file, err := os.Open(filename)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("[NewFitParser] Failed to open file: %w", err)
 	}
 
 	parser := &FitParser{file: file}
 	if err := parser.parseHeader(); err != nil {
 		file.Close()
-		return nil, err
+		return nil, fmt.Errorf("[NewFitParser] Failed to parse header: %w", err)
 	}
 
+	fmt.Printf("[NewFitParser] Header parsed successfully: %+v\n", parser.header)
 	return parser, nil
 }
 
@@ -90,17 +93,19 @@ func (fp *FitParser) parseHeader() error {
 
 // ParseRecords parses all data records from the FIT file
 func (fp *FitParser) ParseRecords() ([]FitRecord, error) {
+	fmt.Println("[ParseRecords] Starting record parsing")
+
 	var records []FitRecord
 
 	// Skip to data section
 	if _, err := fp.file.Seek(int64(fp.header.HeaderSize), 0); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("[ParseRecords] Seek error: %w", err)
 	}
 
 	// Read data section
 	dataBytes := make([]byte, fp.header.DataSize)
 	if _, err := fp.file.Read(dataBytes); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("[ParseRecords] Read error: %w", err)
 	}
 
 	// Parse records from data bytes
